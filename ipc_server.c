@@ -90,7 +90,7 @@ int main(int argc, char*argv[]) {
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGALRM, sig_handler); 
 	signal(SIGUSR1, sig_handler);
-    listen(socket_fd, 5);
+        listen(socket_fd, 5);
 
 	////////////////////////////////////////////////////
 	getcwd(server_root, MAX_FNAME_LEN);// default CWD //
@@ -200,19 +200,20 @@ void child_main(int socketfd, int addrlen) {
 				sprintf(info,"[%d/%d]",getpid(),1);
 				pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
 				pthread_join(tid, NULL);	
-                fprintf(stdout, "\n================= New Client =================\n");
+                                fprintf(stdout, "\n================= New Client =================\n");
 				fprintf(stdout, "[%s]\n", timeprint(tstr));
 				fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 				fprintf(stdout, "Port : %d\n", client_addr.sin_port);
-                fprintf(stdout, "==============================================\n\n");
+                                fprintf(stdout, "==============================================\n\n");
 				pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
-		    	pthread_join(tid, NULL);
+		    	        pthread_join(tid, NULL);
 				memset(record,0,INFO_BUF_SIZE);
 				sprintf(record,"%d,%d,%d,%s",   
 										(int)getpid(),
 										client_addr.sin_port,
 										(int)t,
 										inet_ntoa(client_addr.sin_addr));
+
 				pthread_create(&tid, NULL, &doitWriteRecord, (void*)record); // save each client information
 				pthread_join(tid, NULL);	
 				kill(parentId, SIGUSR1);
@@ -270,7 +271,7 @@ void child_main(int socketfd, int addrlen) {
 			fprintf(stdout, "Port : %d\n", client_addr.sin_port);
 			fprintf(stdout, "==============================================\n\n");
 			pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
-		    pthread_join(tid, NULL);
+		        pthread_join(tid, NULL);
 			kill(parentId, SIGUSR1);
 			close(client_fd);
 		}
