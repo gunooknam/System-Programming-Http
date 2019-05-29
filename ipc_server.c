@@ -9,7 +9,7 @@ pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
 int initFlag;           // -> check whether received SIGINT
 int deadCount;			// -> for check child's dead count
 pList * parentProcList; // -> parent have process management List // heap !
-pList * List;           // -> client have five list               // heap !
+// pList * List;           // -> client have five list               // heap !
 //   ls parameter setting  -> for using ls module
 char** argv=NULL;                 								  // heap !
 int argc = 3;
@@ -90,7 +90,7 @@ int main(int argc, char*argv[]) {
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGALRM, sig_handler); 
 	signal(SIGUSR1, sig_handler);
-        listen(socket_fd, 5);
+    listen(socket_fd, 5);
 
 	////////////////////////////////////////////////////
 	getcwd(server_root, MAX_FNAME_LEN);// default CWD //
@@ -569,8 +569,6 @@ void initMem() {
 	int i;
 	parentProcList = (pList*)malloc(sizeof(pList));
 	parentProcList->pHead = NULL;
-	List = (pList*)malloc(sizeof(pList));
-	List->pHead = NULL;
 	// ls parameter init 
 	// 0 : ls
 	// 1 : -al
@@ -587,8 +585,6 @@ void initMem() {
 void destory() {
 	if (parentProcList)
 		free(parentProcList);
-	if (List)
-		free(List);
 	if (argv) {
 		int i;
 		for (i = 0; i < 3; i++)
