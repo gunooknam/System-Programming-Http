@@ -290,7 +290,6 @@ void *doitWriteRecord(void * arg) { // passing Linked List
 void * doitPrintList(void * arg) {
 	int shm_id, i;
 	struct History * his;
-	//pthread_mutex_lock(&counter_mutex);
 	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
 		printf("shmget fail\n");
 		return NULL;
@@ -318,6 +317,5 @@ void * doitPrintList(void * arg) {
 	}
 	/////////////////////////////////////////////////////
 	shmdt(his);
-	//pthread_mutex_unlock(&counter_mutex);
 	return NULL;
 }
