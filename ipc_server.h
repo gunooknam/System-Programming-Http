@@ -21,6 +21,8 @@ struct History {
     /////////////////////
 };
 
+void *doitProcCreate(void * info);
+
 void *doitGetIdleCount(void * num);
 
 void *doitIdleMinus(void * arg);

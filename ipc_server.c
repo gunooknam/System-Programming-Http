@@ -8,10 +8,10 @@
 pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
 int initFlag;           // -> check whether received SIGINT
 int deadCount;			// -> for check child's dead count
-pList * parentProcList; // -> parent have process management List // heap !
-// pList * List;           // -> client have five list               // heap !
+pList * parentProcList; // -> parent have process management List     // heap !
+// pList * List;           // -> client have five list                // heap !
 //   ls parameter setting  -> for using ls module
-char** argv=NULL;                 								  // heap !
+char** argv=NULL;                      								  // heap !
 int argc = 3;
 int getIdleCount;
 ////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ int main(int argc, char*argv[]) {
 	
     ////////////////////////////////////////////////////
 	fprintf(stdout, "[%s] Server is started.\n", timeprint(tstr));
-	fprintf(stdout, "[%s] Socket is created. HOST: %s, IP: %s, PORT: %d\n", timeprint(tstr), host_name, host_addr, PORTNO);
+	//fprintf(stdout, "[%s] Socket is created. HOST: %s, IP: %s, PORT: %d\n", timeprint(tstr), host_name, host_addr, PORTNO);
 	addrlen = sizeof(client_addr);
 	for (i = 0; i < StartServers; i++) {
 		usleep(1000); //=> for serial add...
@@ -117,18 +117,18 @@ int main(int argc, char*argv[]) {
 
 
 void child_make(int socket_fd, int addrlen) {
+	char tstr[TIME_BUF] = { 0, };
 	pid_t pid;
 	pid = fork();
+	pthread_t tid;
 	if (pid > 0) {
+		fprintf(stdout, "[%s] %ld process is forked.\n", timeprint(tstr), (long)getpid());
+		pthread_create(&tid, NULL, &doitProcCreate, NULL); // save each client information
+	    pthread_join(tid, NULL);
 		addFivePnode(parentProcList, pid); // add Five Node pid
 		return;
 	}
 	else if (pid == 0) {
-		pthread_t tid;
-		char info[INFO_BUF_SIZE]={0,}; // child pass to parent
-		sprintf(info,"[%d/%d]",getpid(),0);
-		pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
-		pthread_join(tid, NULL);       // delay.....
 		child_main(socket_fd, addrlen);
 	}
 }
@@ -154,12 +154,6 @@ void child_main(int socketfd, int addrlen) {
 	signal(SIGUSR1, SIG_IGN);
 	signal(SIGTERM, sig_handler);
 
-	// RUNNING - 1
-	// IDLE    - 0
-	// >> " print fork sentence " >
-	fprintf(stdout, "[%s] %ld process is forked.\n", timeprint(tstr), (long)getpid());
-	pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
-	pthread_join(tid, NULL);
 	clilen = (socklen_t)addrlen;
 	
 	while (1) {
@@ -200,23 +194,20 @@ void child_main(int socketfd, int addrlen) {
 				sprintf(info,"[%d/%d]",getpid(),1);
 				pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
 				pthread_join(tid, NULL);	
-                                fprintf(stdout, "\n================= New Client =================\n");
+                fprintf(stdout, "\n================= New Client =================\n");
 				fprintf(stdout, "[%s]\n", timeprint(tstr));
 				fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 				fprintf(stdout, "Port : %d\n", client_addr.sin_port);
-                                fprintf(stdout, "==============================================\n\n");
-				pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
-		    	        pthread_join(tid, NULL);
+                fprintf(stdout, "==============================================\n\n");
 				memset(record,0,INFO_BUF_SIZE);
 				sprintf(record,"%d,%d,%d,%s",   
 										(int)getpid(),
 										client_addr.sin_port,
 										(int)t,
-										inet_ntoa(client_addr.sin_addr));
-
-				pthread_create(&tid, NULL, &doitWriteRecord, (void*)record); // save each client information
-				pthread_join(tid, NULL);	
-				kill(parentId, SIGUSR1);
+										inet_ntoa(client_addr.sin_addr));	
+				pthread_create(&tid, NULL, &doitWriteRecord, (void*)record);
+				pthread_join(tid, NULL);
+				kill(parentId, SIGUSR1); // only parent catch sigusr1
 
 				if (!strcmp(tok, "/")) {
 					strcpy(argv[1], "-l");
@@ -269,15 +260,39 @@ void child_main(int socketfd, int addrlen) {
 			fprintf(stdout, "[%s]\n", timeprint(tstr));
 			fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 			fprintf(stdout, "Port : %d\n", client_addr.sin_port);
-			fprintf(stdout, "==============================================\n\n");
-			pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
-		        pthread_join(tid, NULL);
+			fprintf(stdout, "==============================================\n\n");			
 			kill(parentId, SIGUSR1);
 			close(client_fd);
 		}
 	}
 	return;
 }
+
+
+void *doitProcCreate(void * info) { // passing Linked List
+	int shm_id;
+	char tstr[TIME_BUF] = { 0, };
+	struct History * his;
+	p_node * p=NULL;
+	
+	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
+		fprintf(stderr, "shmget fail\n");
+		return NULL;
+	}
+	pthread_mutex_lock(&counter_mutex);
+	if ((his = (struct History*)shmat(shm_id, NULL, 0)) == (void*)-1) {
+		fprintf(stderr, "shmat fail\n");
+		return NULL;
+	}
+	his->idlecount++;
+	getIdleCount=his->idlecount;
+	fprintf(stdout, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
+	shmdt(his);
+	pthread_mutex_unlock(&counter_mutex);
+	return NULL;
+}
+
+
 
 void *doitStatusChange(void * info) { // passing Linked List
 	int i, val, shm_id;
@@ -295,8 +310,8 @@ void *doitStatusChange(void * info) { // passing Linked List
 		fprintf(stderr, "shmat fail\n");
 		return NULL;
 	}
-	///////////// save infomation ////////
-	if (info != NULL) {                 //   
+	///////////// save infomation /////////
+	if (info != NULL) {                  //   
 		sscanf(info,"[%d/%d]", &pid, &status);  // point type !!!!!!
 		his->pid=(pid_t)pid;
 		his->status=status;
@@ -305,27 +320,7 @@ void *doitStatusChange(void * info) { // passing Linked List
 		else
 			his->idlecount++;
 	}
-	/////////////////////////////////////
-	shmdt(his);
-	pthread_mutex_unlock(&counter_mutex);
-	return NULL;
-}
-
-void *doitGetIdleCount(void * num) { // passing Linked List
-	int shm_id;
-	struct History * his;
-	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
-		fprintf(stderr, "shmget fail\n");
-		return NULL;
-	}
-	pthread_mutex_lock(&counter_mutex);
-	if ((his = (struct History * )shmat(shm_id, NULL, 0)) == (void*)-1) {
-		fprintf(stderr, "shmat fail\n");
-		return NULL;
-	}
-	///////////// save IdleCount global variable ////////
-	getIdleCount=his->idlecount;
-	/////////////////////////////////////////////////////
+	///////////////////////////////////////
 	shmdt(his);
 	pthread_mutex_unlock(&counter_mutex);
 	return NULL;
@@ -346,6 +341,7 @@ void *doitIdleMinus(void * arg) { // passing Linked List
 	}
 	// Minus idle Count
 	his->idlecount--;
+	getIdleCount=his->idlecount;
 	fprintf(stdout, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
 	/////////////////////////////////////
 	shmdt(his);
@@ -372,6 +368,7 @@ void *doitStatusRead(void * info) { // passing Linked List
 	if( (p=searchPnode(parentProcList,his->pid))!=NULL ){
 		p->status=his->status;
 	}
+	getIdleCount=his->idlecount;
 	fprintf(stdout, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
 	////////////////////////////////////
 	pthread_mutex_unlock(&counter_mutex);
@@ -395,7 +392,7 @@ void *doitDeleteShm(void * arg) { // passing Linked List
 		printf("shmctl fail\n");
 	}
 	return NULL;
-}
+} 
 
 void *doitWriteRecord(void * arg) { // passing Linked List
 	int shm_id;
@@ -477,7 +474,6 @@ void * doitPrintList(void * arg) {
 		}
 		cnt++;
 	}
-
 	/////////////////////////////////////////////////////
 	shmdt(his);
 	pthread_mutex_unlock(&counter_mutex);
@@ -495,7 +491,6 @@ void sig_handler(int sig) {
 		pthread_create(&tid, NULL, &doitPrintList, NULL); // print connection History
 		pthread_join(tid, NULL);	
 		fprintf(stdout, "====================================================\n\n");
-		///////////////////////////////////
 		alarm(10);
 	}                     
 	else if (sig == SIGCHLD) { // =>             Kill signal flow           <= //
@@ -537,7 +532,7 @@ void sig_handler(int sig) {
 	else if (sig == SIGUSR1) { // connection -> idleCount > 6 -> remove // idleCount < 4 --> create  ====> to 5
 			// ***** process count management ***** //  
 			// save gloval variable getIdleCount!!
-			pthread_create(&tid, NULL, &doitGetIdleCount, NULL); // save each client information
+			pthread_create(&tid, NULL, &doitStatusRead, NULL); // save each client information
 		    pthread_join(tid, NULL);
 			if ( getIdleCount > MaxIdleNum){		
 				parentProcList->procCnt=parentProcList->count;	
@@ -545,8 +540,6 @@ void sig_handler(int sig) {
 					pid=idledelPnode(parentProcList);
 					kill(pid, SIGTERM);
 					usleep(1000);
-					pthread_create(&tid, NULL, &doitGetIdleCount, NULL); // save each client information
-		    		pthread_join(tid, NULL);
 					if(getIdleCount <= StartServers) break;
 					if(parentProcList->count <= 0) break; // parent hasn't child
 				}
@@ -554,8 +547,6 @@ void sig_handler(int sig) {
 					while (1){ // control ServerCount to StartServerCount
 							child_make(socket_fd, addrlen);
 							usleep(1000);
-							pthread_create(&tid, NULL, &doitGetIdleCount, NULL); // save each client information
-		    				pthread_join(tid, NULL);
 							if(getIdleCount >= StartServers) break;
 							if(parentProcList->count > MaxChilds) break; // if MaxChilds Condition!
 				}
