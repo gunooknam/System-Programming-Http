@@ -1,15 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// implementation : System programming Http WEB_SERVER					   //
-// author : gunooknam(TA)							                       //
-// 2019-1 System programming							                   //
+// implementation : System programming Http WEB_SERVER			   //
+// author : gunooknam(TA)					           //
+// 2019-1 System programming					           //
 /////////////////////////////////////////////////////////////////////////////
 #include "PS_server.h"
-int initFlag;           // -> check whether received SIGINT
-int deadCount;			// -> for check child's dead count
-// pList * List;           // -> client have five list               // heap !
-//   ls parameter setting  -> for using ls module
-char** argv=NULL;                 								     // heap !
-int argc = 3;
+int initFlag;               // -> check whether received SIGINT
+int deadCount;		    // -> for check child's dead count
+// pList * List;            // -> client have five list                 // heap !
+//   ls parameter setting   // -> for using ls module
+char** argv=NULL;           // -> ls parameter : path                   // heap !
+int argc = 3;		    // -> ls parameter : argument count    
 ////////////////////////////////////////////////////////////////////
 int socket_fd;
 int addrlen;
@@ -57,7 +57,7 @@ int main(int argc, char*argv[]) {
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGALRM, sig_handler); 
 	signal(SIGUSR1, sig_handler);
-    listen(socket_fd, 5);
+        listen(socket_fd, 5);
 	////////////////////////////////////////////////////
 	getcwd(server_root, MAX_FNAME_LEN);// default CWD //
 	////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ int main(int argc, char*argv[]) {
 	gethostname(host_name, sizeof(host_name));
 	host_entry = gethostbyname(host_name);
 	strcpy(host_addr, inet_ntoa( *(struct in_addr*)(host_entry->h_addr_list[0]) ) ); 
-    ////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////
 
 	fprintf(stdout, "[%s] Server is started.\n", timeprint(tstr));
 	fprintf(fp,   "[%s] Server is started.\n", timeprint(tstr));
@@ -92,7 +92,7 @@ void child_make(int socket_fd, int addrlen) {
 		fprintf(stdout, "[%s] %d process is forked.\n", timeprint(tstr), pid);
 		sprintf(logBuf, "[%s] %d process is forked.\n", timeprint(tstr), pid);
 		pthread_create(&tid2, NULL, &doitProcCreate, logBuf); // save each client information
-	    pthread_join(tid2, NULL);
+	        pthread_join(tid2, NULL);
 		addFivePnode(parentProcList, pid); // add pid Node pid
 		return;
 	}
@@ -132,8 +132,7 @@ void child_main(int socketfd, int addrlen) {
 			continue;
 		}
 		//...........IP ChecK............//
-		if (IP_match(inet_ntoa(client_addr.sin_addr)) == 0) {
-			// response error
+		if (IP_match(inet_ntoa(client_addr.sin_addr)) == 0) {  // response error ?
 			response_result=response(client_fd, inet_ntoa(client_addr.sin_addr), RES_403);
 			is403=1;
 		}	
@@ -199,19 +198,19 @@ void child_main(int socketfd, int addrlen) {
 				sprintf(info,"[%d/%d]",getpid(),1);
 				pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
 				pthread_join(tid, NULL);	
-                fprintf(stdout, "\n================= New Client =================\n");
+                                fprintf(stdout, "\n================= New Client =================\n");
 				fprintf(stdout, "[%s] %s %d %s\n", timeprint(tstr), url, code[response_result], message[response_result]);
 				fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 				fprintf(stdout, "Port : %d\n", client_addr.sin_port);
-                fprintf(stdout, "==============================================\n\n");		
+                                fprintf(stdout, "==============================================\n\n");		
 				memset(logBuf,0,BUFFSIZE);
 				sprintf(logBuf, "\n================= New Client =================\n"
 				                "[%s] %s %d %s\n"
 								"IP : %s\n"
 								"Port : %d\n"
                 				"==============================================\n\n", timeprint(tstr), url, code[response_result], message[response_result],
-																					  inet_ntoa(client_addr.sin_addr),
-																					  client_addr.sin_port);
+												      inet_ntoa(client_addr.sin_addr),
+												      client_addr.sin_port);
 				pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
 				pthread_join(tid, NULL);
 				memset(record,0,INFO_BUF_SIZE);
@@ -219,10 +218,10 @@ void child_main(int socketfd, int addrlen) {
 				time_t t;
 				time(&t);
 				sprintf(record,"%d,%d,%d,%s",   
-										(int)getpid(),
-										client_addr.sin_port,
-										(int)t,
-										inet_ntoa(client_addr.sin_addr));
+							     (int)getpid(),
+							     client_addr.sin_port,
+							     (int)t,
+							     inet_ntoa(client_addr.sin_addr));
 				pthread_create(&tid, NULL, &doitWriteRecord, (void*)record); // save each client information
 				pthread_join(tid, NULL);	
 				kill(parentId, SIGUSR1);
@@ -242,15 +241,16 @@ void child_main(int socketfd, int addrlen) {
 			fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 			fprintf(stdout, "Port : %d\n", client_addr.sin_port);
 			fprintf(stdout, "==============================================\n\n");
-			//====================================================================
+
 			memset(logBuf,0,BUFFSIZE);
 			sprintf(logBuf, "\n============= Disconnected client ============\n"
-							"[%s] %s %d %s\n"
-							"IP : %s\n"
-							"Port : %d\n"
-							"==============================================\n\n", timeprint(tstr), url, code[response_result], message[response_result],
-																					inet_ntoa(client_addr.sin_addr),
-																					client_addr.sin_port);
+					"[%s] %s %d %s\n"
+				        "IP : %s\n"
+					"Port : %d\n"
+					"==============================================\n\n", timeprint(tstr), url, code[response_result], message[response_result],
+											      inet_ntoa(client_addr.sin_addr),
+											      client_addr.sin_port);
+
 			pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
 			pthread_join(tid, NULL);
 			kill(parentId, SIGUSR1);
@@ -268,11 +268,11 @@ void sig_handler(int sig) {
 	if (sig == SIGALRM) { // =>      alarm siganl flow  :  parent part     <= //
 		fprintf(stdout, "\n=============== Connection History =================\n");
 		fprintf(stdout, "No.	IP		PID	PORT	TIME\n");
-		// *******************************//
+		// ***********************************************************************//
 		pthread_create(&tid, NULL, &doitPrintList, NULL); // print connection History
 		pthread_join(tid, NULL);	
+		// ***********************************************************************//
 		fprintf(stdout, "====================================================\n\n");
-		///////////////////////////////////
 		alarm(10);
 	}                     
 	else if (sig == SIGCHLD) { // =>             Kill signal flow           <= //
@@ -337,7 +337,6 @@ void sig_handler(int sig) {
 							if(parentProcList->count > MaxChilds) break; // if MaxChilds Condition!
 				}
 			}
-			// *********************************** //
 	}
 }
 
