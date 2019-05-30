@@ -26,10 +26,11 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 #define MAX_FNAME_LEN   256
 #define MSG_BUFFSIZE    8192
-#define BUFFSIZE	    10000
+#define BUFFSIZE	    1024
 #define ERR_BUF_LEN     100
 #define TIME_BUF 50 
 #define RES_ROOT 0
@@ -37,5 +38,10 @@
 #define RES_FILE 2
 #define RES_404  3
 #define RES_403  4
+#define PORTNO		  39998
+#define	RUNNING       1
+#define IDLE          0
+#define INFO_BUF_SIZE 50
+#define SHM_SIZE      4096
 
 #endif

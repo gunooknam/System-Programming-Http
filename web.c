@@ -1,4 +1,5 @@
 #include "web.h"
+const char * access_perm_file = "accessible.usr";
 
 void response(int client_fd, char * path, int flag) {
 	char response_header[BUFFSIZE] = { 0, };
@@ -150,7 +151,7 @@ int IP_match(char * ipstring) {
 	char IP[16] = { 0, };
 	char buf[16] = { 0, };
 	strcpy(IP, ipstring);
-	fp = fopen("accessible.usr", "r");
+	fp = fopen(access_perm_file, "r");
 	if (!fp) {
 		fprintf(stderr, "error : There is not accessible.user file\n");
 		exit(1);

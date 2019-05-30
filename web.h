@@ -9,5 +9,6 @@ void response(int client_fd, char * path, int flag);
 
 int IP_match(char * ipstring);
 
+extern const char * access_perm_file;
 
 #endif
