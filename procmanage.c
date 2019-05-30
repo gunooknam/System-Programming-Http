@@ -1,4 +1,4 @@
-#include "shm.h"
+#include "procmanage.h"
 const char * portNum="39998";
 const char * access_log="access.log";
 const char * config_file = "httpd.conf";
@@ -12,8 +12,8 @@ int getIdleCount;
 sem_t *mysem;
 pList * parentProcList; // -> parent have process management List // heap !
 // pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-int openHttpConf() {
+int openHttpConf(FILE * _fp) {
+	char tstr[TIME_BUF] = { 0, };
 	FILE * fp;
 	char * tok;
 	char buf[30];
@@ -21,7 +21,9 @@ int openHttpConf() {
 	int i = 0;
 	fp = fopen(config_file, "r");
 	if (!fp) {
-		fprintf(stdout,"doesn't have httpd.conf!! \n");
+		fprintf(stdout,"[%s] doesn't have httpd.conf!! \n",timeprint(tstr));
+		fprintf(_fp,"[%s] doesn't have httpd.conf!! \n",timeprint(tstr));
+		fclose(_fp);
 		exit(1);
 	}
 	while (fgets(buf, 30, fp) != NULL) { 
@@ -140,7 +142,6 @@ void *doitStatusRead(void * info) { // passing Linked List
 		fprintf(stderr, "shmget fail\n");
 		return NULL;
 	}
-	//pthread_mutex_lock(&counter_mutex);
 	mysem= sem_open(portNum, O_RDWR );
 	sem_wait(mysem);
 	if ((his = (struct History*)shmat(shm_id, NULL, 0)) == (void*)-1) {

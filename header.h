@@ -33,11 +33,15 @@
 #define BUFFSIZE	    1024
 #define ERR_BUF_LEN     100
 #define TIME_BUF 50 
-#define RES_ROOT 0
-#define RES_DIR  1
-#define RES_FILE 2
-#define RES_404  3
-#define RES_403  4
+
+#define RES_OK   0
+#define RES_404  1
+#define RES_403  2
+#define RES_ROOT 3
+#define RES_DIR  4
+#define RES_FILE 5
+#define RES_NUM  3
+
 #define PORTNO		  39998
 #define	RUNNING       1
 #define IDLE          0

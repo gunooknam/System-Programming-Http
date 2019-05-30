@@ -1,21 +1,158 @@
-[Thu May 30 16:24:23 2019] Server is started.
-[Thu May 30 16:24:23 2019] 12556 process is forked.
-[Thu May 30 16:24:23 2019] idleProcessCount : 1
-[Thu May 30 16:24:23 2019] 12558 process is forked.
-[Thu May 30 16:24:23 2019] idleProcessCount : 2
-[Thu May 30 16:24:23 2019] 12560 process is forked.
-[Thu May 30 16:24:23 2019] idleProcessCount : 3
-[Thu May 30 16:24:23 2019] 12562 process is forked.
-[Thu May 30 16:24:23 2019] idleProcessCount : 4
-[Thu May 30 16:24:23 2019] 12564 process is forked.
-[Thu May 30 16:24:23 2019] idleProcessCount : 5
-[Thu May 30 16:24:26 2019] 12564 process is terminated.
-[Thu May 30 16:24:26 2019] idleProcessCount : 4
-[Thu May 30 16:24:26 2019] 12562 process is terminated.
-[Thu May 30 16:24:26 2019] idleProcessCount : 3
-[Thu May 30 16:24:26 2019] 12560 process is terminated.
-[Thu May 30 16:24:26 2019] idleProcessCount : 2
-[Thu May 30 16:24:26 2019] 12558 process is terminated.
-[Thu May 30 16:24:26 2019] idleProcessCount : 1
-[Thu May 30 16:24:26 2019] 12556 process is terminated.
-[Thu May 30 16:24:26 2019] idleProcessCount : 0
+[Thu May 30 18:38:44 2019] Server is started.
+[Thu May 30 18:38:44 2019] 20577 process is forked.
+[Thu May 30 18:38:44 2019] idleProcessCount : 1
+[Thu May 30 18:38:44 2019] 20579 process is forked.
+[Thu May 30 18:38:44 2019] idleProcessCount : 2
+[Thu May 30 18:38:44 2019] 20581 process is forked.
+[Thu May 30 18:38:44 2019] idleProcessCount : 3
+[Thu May 30 18:38:44 2019] 20583 process is forked.
+[Thu May 30 18:38:44 2019] idleProcessCount : 4
+[Thu May 30 18:38:44 2019] 20585 process is forked.
+[Thu May 30 18:38:44 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:38:48 2019] / 200 OK
+IP : 127.0.0.1
+Port : 41171
+==============================================
+
+[Thu May 30 18:38:48 2019] idleProcessCount : 4
+
+================= New Client =================
+[Thu May 30 18:38:49 2019] / 200 OK
+IP : 127.0.0.1
+Port : 41683
+==============================================
+
+[Thu May 30 18:38:49 2019] idleProcessCount : 3
+[Thu May 30 18:38:49 2019] 20596 process is forked.
+[Thu May 30 18:38:49 2019] idleProcessCount : 4
+[Thu May 30 18:38:49 2019] 20598 process is forked.
+[Thu May 30 18:38:49 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:38:53 2019] /accessible.usr 200 OK
+IP : 127.0.0.1
+Port : 42707
+==============================================
+
+[Thu May 30 18:38:53 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:38:53 2019] / 200 OK
+IP : 127.0.0.1
+Port : 41171
+==============================================
+
+[Thu May 30 18:38:53 2019] idleProcessCount : 5
+
+============= Disconnected client ============
+[Thu May 30 18:38:54 2019] / 200 OK
+IP : 127.0.0.1
+Port : 41683
+==============================================
+
+[Thu May 30 18:38:54 2019] idleProcessCount : 6
+
+============= Disconnected client ============
+[Thu May 30 18:38:58 2019] /accessible.usr 200 OK
+IP : 127.0.0.1
+Port : 42707
+==============================================
+
+[Thu May 30 18:38:58 2019] idleProcessCount : 7
+[Thu May 30 18:38:58 2019] 20598 process is terminated.
+[Thu May 30 18:38:58 2019] idleProcessCount : 6
+[Thu May 30 18:38:58 2019] 20596 process is terminated.
+[Thu May 30 18:38:58 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:39:00 2019] /access.log 200 OK
+IP : 127.0.0.1
+Port : 43219
+==============================================
+
+[Thu May 30 18:39:00 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:39:05 2019] /access.log 200 OK
+IP : 127.0.0.1
+Port : 43219
+==============================================
+
+[Thu May 30 18:39:05 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:39:13 2019] /PS_server.h 200 OK
+IP : 127.0.0.1
+Port : 43731
+==============================================
+
+[Thu May 30 18:39:13 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:39:18 2019] /PS_server.h 200 OK
+IP : 127.0.0.1
+Port : 43731
+==============================================
+
+[Thu May 30 18:39:18 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:39:18 2019] /PS_server.c 200 OK
+IP : 127.0.0.1
+Port : 44243
+==============================================
+
+[Thu May 30 18:39:18 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:39:23 2019] /PS_server.c 200 OK
+IP : 127.0.0.1
+Port : 44243
+==============================================
+
+[Thu May 30 18:39:23 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:39:32 2019] /plist.h 200 OK
+IP : 127.0.0.1
+Port : 44755
+==============================================
+
+[Thu May 30 18:39:32 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:39:37 2019] /plist.h 200 OK
+IP : 127.0.0.1
+Port : 44755
+==============================================
+
+[Thu May 30 18:39:37 2019] idleProcessCount : 5
+
+================= New Client =================
+[Thu May 30 18:39:42 2019] /PS_server.c 200 OK
+IP : 127.0.0.1
+Port : 45267
+==============================================
+
+[Thu May 30 18:39:42 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+[Thu May 30 18:39:47 2019] /PS_server.c 200 OK
+IP : 127.0.0.1
+Port : 45267
+==============================================
+
+[Thu May 30 18:39:47 2019] idleProcessCount : 5
+[Thu May 30 18:39:51 2019] SIGINT interrupt on.
+[Thu May 30 18:39:51 2019] 20585 process is terminated.
+[Thu May 30 18:39:51 2019] idleProcessCount : 4
+[Thu May 30 18:39:51 2019] 20583 process is terminated.
+[Thu May 30 18:39:51 2019] idleProcessCount : 3
+[Thu May 30 18:39:51 2019] 20581 process is terminated.
+[Thu May 30 18:39:51 2019] idleProcessCount : 2
+[Thu May 30 18:39:51 2019] 20579 process is terminated.
+[Thu May 30 18:39:51 2019] idleProcessCount : 1
+[Thu May 30 18:39:51 2019] 20577 process is terminated.
+[Thu May 30 18:39:51 2019] idleProcessCount : 0

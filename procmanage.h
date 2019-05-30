@@ -1,15 +1,14 @@
 #ifndef __SHM_H__
 #define __SHM_H__
-
 #include "header.h"
 #include "plist.h"
 #include "web.h"
 extern sem_t *mysem;
-// httpd.conf variables
 extern char logBuf[BUFFSIZE];
 extern const char * access_log;
 extern const char * portNum;
 extern const char * config_file;
+// httpd.conf variables
 extern int MaxChilds;
 extern int MaxIdleNum;
 extern int MinIdleNum;
@@ -34,7 +33,7 @@ void *doitProcCreate(void * info);
 
 void *doitLogWrite(void * log);
 
-int openHttpConf();
+int openHttpConf(FILE * _fp);
 
 void *doitGetIdleCount(void * num);
 

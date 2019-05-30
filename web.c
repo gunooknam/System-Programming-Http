@@ -1,7 +1,7 @@
 #include "web.h"
 const char * access_perm_file = "accessible.usr";
 
-void response(int client_fd, char * path, int flag) {
+int response(int client_fd, char * path, int flag) {
 	char response_header[BUFFSIZE] = { 0, };
 	char response_message[MSG_BUFFSIZE] = { 0, };
 	char buf[100];
@@ -9,18 +9,16 @@ void response(int client_fd, char * path, int flag) {
 	int flen = 0;
 
 	if (flag == RES_ROOT || flag == RES_DIR) {
-
 		int fd = open("html_ls.html", O_RDONLY);
 
 		if (fd == -1) {
 			fprintf(stdout, "NOT OPEN");
-			return;
+			return RES_404;
 		}
-
 		stat("html_ls.html", &info);
 
 		sprintf(response_header,
-			"HTTP/1.0 200 OK Found\r\n"
+			"HTTP/1.0 200 OK\r\n"
 			"Content-length:%lu\r\n"
 			"Content-type:text/html\r\n\r\n",
 			info.st_size);
@@ -39,7 +37,7 @@ void response(int client_fd, char * path, int flag) {
 			memset(response_message, 0, sizeof(response_message));
 		}
 		close(fd);
-
+		return RES_OK;
 	}
 	else if (flag == RES_FILE) {  // for long file data
 
@@ -48,7 +46,7 @@ void response(int client_fd, char * path, int flag) {
 		int fd = open(path, O_RDONLY);
 		if (fd == -1) {
 			fprintf(stdout, "NOT OPEN FILE");
-			return;
+			return RES_404;
 		}
 
 		// only stat!! No lstat ! if lstat? -> link file size read....
@@ -93,7 +91,7 @@ void response(int client_fd, char * path, int flag) {
 			memset(response_message, 0, sizeof(response_message));
 		}
 		close(fd);
-
+		return RES_OK;
 	}
 	else if (flag == RES_404) {
 		sprintf(response_message,
@@ -113,7 +111,7 @@ void response(int client_fd, char * path, int flag) {
 
 		write(client_fd, response_header, strlen(response_header));
 		write(client_fd, response_message, strlen(response_message));
-		return;
+		return RES_404;
 	}
 	else if (flag == RES_403) { // access control
 		sprintf(response_message,
@@ -133,8 +131,9 @@ void response(int client_fd, char * path, int flag) {
 
 		write(client_fd, response_header, strlen(response_header));
 		write(client_fd, response_message, strlen(response_message));
+		return RES_403;
 	}
-	return;
+	return RES_OK;
 }
 
 char * timeprint(char * str) {
@@ -154,7 +153,7 @@ int IP_match(char * ipstring) {
 	fp = fopen(access_perm_file, "r");
 	if (!fp) {
 		fprintf(stderr, "error : There is not accessible.user file\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	while (!feof(fp)) {
 		fgets(buf, 16, fp);

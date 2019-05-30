@@ -5,7 +5,7 @@
 
 char * timeprint(char * str);
 
-void response(int client_fd, char * path, int flag);
+int response(int client_fd, char * path, int flag);
 
 int IP_match(char * ipstring);
 

@@ -4,9 +4,9 @@
 #include "header.h"
 #include "plist.h"
 #include "ls.h"
-#include "shm.h"
+#include "procmanage.h"
 
-void *doitLogWrite(void * log);
+void existAccessibleFile(FILE * _fp);
 
 void child_make(int socket_fd, int addrlen);
 
@@ -19,5 +19,16 @@ void destory();
 void initMem();
 
 char server_root[MAX_FNAME_LEN]; //server root path
+
+const int code[RES_NUM]={
+    200,404,403
+};
+
+const char message[RES_NUM][20]={
+    "OK",
+    "Not Found", 
+    "Forbidden"
+};
+
 
 #endif
