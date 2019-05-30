@@ -15,13 +15,13 @@
 #include <getopt.h>
 #include <strings.h> // for case sensetive compare
 
-#define LS_OP_A      1
+#define LS_OP_A          1
 #define LS_OP_L		 1 << 1
 #define LS_OP_H		 1 << 2
-#define LS_OP_r      1 << 3
+#define LS_OP_r          1 << 3
 #define LS_OP_S		 1 << 4
 #define LS_ERR		 1 << 5
-#define MAX_FNAME_LEN   256
+#define MAX_FNAME_LEN    256
 
 char origin[MAX_FNAME_LEN]; // only origin path
 int path_count; // argument path count 

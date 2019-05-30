@@ -18,14 +18,14 @@ extern int getIdleCount;
 extern pList * parentProcList; // -> parent have process management List // heap !
 
 struct History {
-	// History record  //
+    //  History record //
     p_node record[50]; //
-	int num_req;       //
+    int num_req;       //
     /////////////////////
     //// child info /////
-    int pid;         // child record -> parent read -> parent update List
-    int status;      // child status
-    int idlecount;
+    int pid;           // child record -> parent read -> parent update List
+    int status;        // child status
+    int idlecount;     //
     /////////////////////
 };
 

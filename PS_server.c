@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "PS_server.h"
 int initFlag;               // -> check whether received SIGINT
-int deadCount;		    // -> for check child's dead count
+int deadCount;		    // -> for check child's dead count             
 // pList * List;            // -> client have five list                 // heap !
 //   ls parameter setting   // -> for using ls module
 char** argv=NULL;           // -> ls parameter : path                   // heap !
@@ -14,7 +14,6 @@ int argc = 3;		    // -> ls parameter : argument count
 int socket_fd;
 int addrlen;
 pid_t parentId;
-FILE * g_fp;
 
 int main(int argc, char*argv[]) {
 	FILE * fp = fopen(access_log, "w");
@@ -372,11 +371,11 @@ void initMem() {
 // memory deallocation ! //
 void destory() {
 	if (parentProcList)
-		free(parentProcList);
+		freePnode(parentProcList);
 	if (argv) {
 		int i;
 		for (i = 0; i < 3; i++)
-			free(argv[i]);
+			free(argv[i]); 
 		free(argv);
 	}
 }
