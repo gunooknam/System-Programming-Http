@@ -3,7 +3,7 @@
 # made by gunooknam
 
 CC=gcc
-EXEC=PS_server_39998
+EXEC=semaphore_server_39998
 SRC=*.c
 LIB=-lpthread
 

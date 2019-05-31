@@ -1,6 +1,6 @@
 #include "procmanage.h"
 const char * portNum="39998";
-const char * access_log="access.log";
+const char * access_log="server_log.txt";
 const char * config_file = "httpd.conf";
 char logBuf[BUFFSIZE]={0,};
 int MaxChilds;

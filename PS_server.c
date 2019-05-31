@@ -130,6 +130,8 @@ void child_main(int socketfd, int addrlen) {
 		if ((client_fd = accept(socketfd, (struct sockaddr*) &client_addr, &clilen)) == -1) {
 			continue;
 		}
+		struct timespec start,end;
+		clock_gettime(CLOCK_REALTIME,&start); //start time
 		//...........IP ChecK............//
 		if (IP_match(inet_ntoa(client_addr.sin_addr)) == 0) {  // response error ?
 			response_result=response(client_fd, inet_ntoa(client_addr.sin_addr), RES_403);
@@ -198,17 +200,23 @@ void child_main(int socketfd, int addrlen) {
 				pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
 				pthread_join(tid, NULL);	
                                 fprintf(stdout, "\n================= New Client =================\n");
-				fprintf(stdout, "[%s] %s %d %s\n", timeprint(tstr), url, code[response_result], message[response_result]);
+				//fprintf(stdout, "TIME : [%s]\nURL : %s %d %s\n", timeprint(tstr), url, code[response_result], message[response_result]);
+				fprintf(stdout, "TIME : [%s]\nURL : %s\n", timeprint(tstr), url);
 				fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 				fprintf(stdout, "Port : %d\n", client_addr.sin_port);
+				fprintf(stdout, "PID : %d\n", getpid());
                                 fprintf(stdout, "==============================================\n\n");		
 				memset(logBuf,0,BUFFSIZE);
 				sprintf(logBuf, "\n================= New Client =================\n"
-				                "[%s] %s %d %s\n"
+				                "TIME : [%s]\n"
+					            "URL : %s\n"				    
 								"IP : %s\n"
 								"Port : %d\n"
-                				"==============================================\n\n", timeprint(tstr), url, code[response_result], message[response_result],
+								"PID : %d\n"
+                				"==============================================\n\n", //timeprint(tstr), url, code[response_result], message[response_result],
+								                    timeprint(tstr), url, 
 												      inet_ntoa(client_addr.sin_addr),
+													  getpid(),
 												      client_addr.sin_port);
 				pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
 				pthread_join(tid, NULL);
@@ -230,25 +238,33 @@ void child_main(int socketfd, int addrlen) {
 				memset(buf, 0, BUFFSIZE);
 				break;
 			}
+			clock_gettime(CLOCK_REALTIME,&end); //end time
 			sleep(5); // sleep before disconnect
 			memset(info,0,INFO_BUF_SIZE);
 			sprintf(info,"[%d/%d]",getpid(),0);
 			pthread_create(&tid, NULL, &doitStatusChange, (void*)info); // save each client information
 			pthread_join(tid, NULL);
 			fprintf(stdout, "\n============= Disconnected client ============\n");
-			fprintf(stdout, "[%s] %s %d %s\n", timeprint(tstr),url, code[response_result], message[response_result]);
+			fprintf(stdout, "TIME : [%s]\nURL : %s\n", timeprint(tstr),url);
 			fprintf(stdout, "IP : %s\n", inet_ntoa(client_addr.sin_addr));
 			fprintf(stdout, "Port : %d\n", client_addr.sin_port);
+			fprintf(stdout, "PID : %d\n", getpid());
+			fprintf(stdout, "CONNECTING TIME: %ld(us)\n",(end.tv_nsec-start.tv_nsec)/(1000)); // covert to micrometer second
 			fprintf(stdout, "==============================================\n\n");
 
 			memset(logBuf,0,BUFFSIZE);
 			sprintf(logBuf, "\n============= Disconnected client ============\n"
-					"[%s] %s %d %s\n"
+					"TIME : [%s]\n"
+					"URL : %s\n"
 				        "IP : %s\n"
 					"Port : %d\n"
-					"==============================================\n\n", timeprint(tstr), url, code[response_result], message[response_result],
+					"PID : %d\n"
+					"CONNECTING TIME: %ld(us)\n"
+					"==============================================\n\n", timeprint(tstr), url,
 											      inet_ntoa(client_addr.sin_addr),
-											      client_addr.sin_port);
+											      client_addr.sin_port,
+												  getpid(),
+												  (end.tv_nsec-start.tv_nsec)/(1000)); // covert to micrometer second
 
 			pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
 			pthread_join(tid, NULL);
@@ -301,7 +317,7 @@ void sig_handler(int sig) {
 		// parent pass signal to all child process
 		parentProcList->procCnt=parentProcList->count; // save before Count
 		memset(logBuf, 0, BUFFSIZE);
-		sprintf(logBuf, "[%s] SIGINT interrupt on.\n", timeprint(tstr));
+		sprintf(logBuf, "^c\n");
 		pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
 		pthread_join(tid, NULL);
 		while (p) {
