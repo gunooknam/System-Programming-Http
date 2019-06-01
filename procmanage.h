@@ -35,8 +35,6 @@ void *doitLogWrite(void * log);
 
 int openHttpConf(FILE * _fp);
 
-void *doitGetIdleCount(void * num);
-
 void *doitIdleMinus(void * arg);
 
 void *doitWriteRecord(void * arg);
