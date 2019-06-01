@@ -256,7 +256,7 @@ void child_main(int socketfd, int addrlen) {
 			fprintf(stdout, "PID : %d\n", getpid());
 			fprintf(stdout, "CONNECTING TIME: %ld(us)\n",endsec-startsec); // covert to micrometer second
 			fprintf(stdout, "==============================================\n\n");
-			fprintf(stdout,"start : %ld, end : %ld\n", endsec, startsec);
+			//fprintf(stdout,"start : %ld, end : %ld\n", endsec, startsec);
 			memset(logBuf,0,BUFFSIZE);
 			sprintf(logBuf, "\n============= Disconnected client ============\n"
 					"TIME : [%s]\n"
