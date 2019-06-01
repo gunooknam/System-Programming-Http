@@ -11,7 +11,8 @@ int MaxHistory;
 int getIdleCount;
 sem_t *mysem;
 pList * parentProcList; // -> parent have process management List // heap !
-// pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 int openHttpConf(FILE * _fp) {
 	char tstr[TIME_BUF] = { 0, };
 	FILE * fp;
@@ -61,8 +62,7 @@ void *doitStatusChange(void * info) { // passing Linked List
 		fprintf(stderr, "shmat fail\n");
 		return NULL;
 	}
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
+	pthread_mutex_lock(&counter_mutex);
 	///////////// save infomation ////////
 	if (info != NULL) {                 //   
 		sscanf(info,"[%d/%d]", &pid, &status);  // point type !!!!!!
@@ -74,30 +74,11 @@ void *doitStatusChange(void * info) { // passing Linked List
 			his->idlecount++;
 	}
 	/////////////////////////////////////
+	pthread_mutex_unlock(&counter_mutex);
 	shmdt(his);
-	sem_post(mysem);	
-	sem_close(mysem);
 	return NULL;
 }
 
-void *doitGetIdleCount(void * num) { // passing Linked List
-	int shm_id;
-	struct History * his;
-	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
-		fprintf(stderr, "shmget fail\n");
-		return NULL;
-	}
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
-	if ((his = (struct History * )shmat(shm_id, NULL, 0)) == (void*)-1) {
-		fprintf(stderr, "shmat fail\n");
-		return NULL;
-	}
-	shmdt(his);
-	sem_post(mysem);	
-	sem_close(mysem);
-	return NULL;
-}
 
 void *doitIdleMinus(void * arg) { // passing Linked List
 	int shm_id;
@@ -105,28 +86,26 @@ void *doitIdleMinus(void * arg) { // passing Linked List
 	char str[BUFFSIZE]={0,};
 	struct History * his;
 	pthread_t tid;
+	
 	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
 		fprintf(stderr, "shmget fail\n");
 		return NULL;
 	}
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
 	if ((his = (struct History * )shmat(shm_id, NULL, 0)) == (void*)-1) {
 		fprintf(stderr, "shmat fail\n");
 		return NULL;
 	}
+
+	pthread_mutex_lock(&counter_mutex);
 	his->idlecount--;
 	getIdleCount=his->idlecount;
-	///////////////////////////////////////////////////////////////////////
 	sprintf(logBuf, "%s[%s] idleProcessCount : %d\n",(char*)arg, timeprint(tstr), his->idlecount);
-    fprintf(stdout, "%s",logBuf);
-	FILE * fp = fopen(access_log, "a");
-	strcpy(str,(char *)logBuf);
-	fprintf(fp,"%s",str); // write log
-	fclose(fp);
+	fprintf(stdout, "%s",logBuf);
+	pthread_mutex_unlock(&counter_mutex);
+	///////////////////////////////////////////////////////////////////////
+	pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
+	pthread_join(tid, NULL);
 	shmdt(his);
-	sem_post(mysem);	
-	sem_close(mysem);
 	return NULL;
 }
 
@@ -138,16 +117,18 @@ void *doitStatusRead(void * info) { // passing Linked List
 	struct History * his;
 	p_node * p=NULL;
 	pthread_t tid;
+
 	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
 		fprintf(stderr, "shmget fail\n");
 		return NULL;
 	}
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
+	
 	if ((his = (struct History*)shmat(shm_id, NULL, 0)) == (void*)-1) {
 		fprintf(stderr, "shmat fail\n");
 		return NULL;
 	}
+
+	pthread_mutex_lock(&counter_mutex);
 	///////////// save IdleCount global variable ////////
 	getIdleCount=his->idlecount;
 	/////////////////////////////////////////////////////
@@ -161,13 +142,10 @@ void *doitStatusRead(void * info) { // passing Linked List
 		sprintf(logBuf, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
 	}
  	fprintf(stdout, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
-	FILE * fp = fopen(access_log, "a");
-	strcpy(str,(char *)logBuf);
-	fprintf(fp,"%s",str); // write log
-	fclose(fp);
+	pthread_mutex_unlock(&counter_mutex);
+	pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
+	pthread_join(tid, NULL);
 	shmdt(his);
-	sem_post(mysem);	
-	sem_close(mysem);
 	return NULL;
 }
 
@@ -179,28 +157,24 @@ void *doitProcCreate(void * info) { // passing Linked List
 	struct History * his;
 	p_node * p=NULL;
 	pthread_t tid;
+	
 	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
 		fprintf(stderr, "shmget fail\n");
 		return NULL;
 	}
-	//pthread_mutex_lock(&counter_mutex);
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
 	if ((his = (struct History*)shmat(shm_id, NULL, 0)) == (void*)-1) {
 		fprintf(stderr, "shmat fail\n");
 		return NULL;
 	}
+	pthread_mutex_lock(&counter_mutex);
 	his->idlecount++;
 	getIdleCount=his->idlecount;
 	sprintf(logBuf, "%s[%s] idleProcessCount : %d\n",(char*)info, timeprint(tstr), his->idlecount);
 	fprintf(stdout, "[%s] idleProcessCount : %d\n", timeprint(tstr), his->idlecount);
-	FILE * fp = fopen(access_log, "a");
-	strcpy(str,(char *)logBuf);
-	fprintf(fp,"%s",str); // write log
-	fclose(fp);
+	pthread_mutex_unlock(&counter_mutex);
+	pthread_create(&tid, NULL, &doitLogWrite, logBuf); // save each client information
+	pthread_join(tid, NULL);
 	shmdt(his);
-	sem_post(mysem);	
-	sem_close(mysem);
 	return NULL;
 }
 
@@ -241,9 +215,7 @@ void *doitWriteRecord(void * arg) { // passing Linked List
 	struct History * his;
 	int i,j;
 	char timebuf[50] = { 0, };
-	mysem= sem_open(portNum, O_RDWR );
-	sem_wait(mysem);
-	
+    
 	if ((shm_id = shmget((key_t)PORTNO, SHM_SIZE, IPC_CREAT | 0666)) == -1) {
 		fprintf(stderr, "shmget fail\n");
 		return NULL;
@@ -253,7 +225,7 @@ void *doitWriteRecord(void * arg) { // passing Linked List
 		return NULL;
 	}
 	//////////////////////////////////////////////////////////
-
+	pthread_mutex_lock(&counter_mutex);
 	if(his->num_req==50){
 		for(i=49;i>40;i--){
 				his->record[i-41].PID=his->record[i].PID;
@@ -280,10 +252,9 @@ void *doitWriteRecord(void * arg) { // passing Linked List
 	timebuf[strlen(timebuf) - 1] = '\0';
 	strcpy(his->record[his->num_req].timestamp, timebuf);
 	his->num_req++;
+	pthread_mutex_unlock(&counter_mutex);
 	shmdt(his);
 	///////////////////////////////////////////////////////////
-	sem_post(mysem);	
-	sem_close(mysem);
 	return NULL;
 }
 
@@ -299,6 +270,7 @@ void * doitPrintList(void * arg) {
 		printf("shmget fail\n");
 		return NULL;
 	}
+	pthread_mutex_lock(&counter_mutex);
 	///////////// print History 10 record ////////////////
 	int N = his->num_req;
 	int cnt=0;
@@ -317,6 +289,7 @@ void * doitPrintList(void * arg) {
 		cnt++;
 	}
 	/////////////////////////////////////////////////////
+	pthread_mutex_unlock(&counter_mutex);
 	shmdt(his);
 	return NULL;
 }
