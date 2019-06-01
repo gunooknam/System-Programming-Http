@@ -12,6 +12,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <time.h>
+#include <sys/time.h>
 #include <fnmatch.h>
 #include <getopt.h>
 #include <strings.h> // for case sensetive compare

@@ -1,93 +1,177 @@
-[Sat Jun  1 20:11:57 2019] Server is started.
-[Sat Jun  1 20:11:57 2019] 6148 process is forked.
-[Sat Jun  1 20:11:57 2019] idleProcessCount : 1
-[Sat Jun  1 20:11:57 2019] 6151 process is forked.
-[Sat Jun  1 20:11:57 2019] idleProcessCount : 2
-[Sat Jun  1 20:11:57 2019] 6154 process is forked.
-[Sat Jun  1 20:11:57 2019] idleProcessCount : 3
-[Sat Jun  1 20:11:57 2019] 6157 process is forked.
-[Sat Jun  1 20:11:57 2019] idleProcessCount : 4
-[Sat Jun  1 20:11:57 2019] 6160 process is forked.
-[Sat Jun  1 20:11:57 2019] idleProcessCount : 5
+[Sat Jun  1 21:40:35 2019] Server is started.
+[Sat Jun  1 21:40:35 2019] 11297 process is forked.
+[Sat Jun  1 21:40:35 2019] idleProcessCount : 1
+[Sat Jun  1 21:40:35 2019] 11300 process is forked.
+[Sat Jun  1 21:40:35 2019] idleProcessCount : 2
+[Sat Jun  1 21:40:35 2019] 11303 process is forked.
+[Sat Jun  1 21:40:35 2019] idleProcessCount : 3
+[Sat Jun  1 21:40:35 2019] 11306 process is forked.
+[Sat Jun  1 21:40:35 2019] idleProcessCount : 4
+[Sat Jun  1 21:40:35 2019] 11309 process is forked.
+[Sat Jun  1 21:40:35 2019] idleProcessCount : 5
 
 ================= New Client =================
-TIME : [Sat Jun  1 20:12:02 2019]
+TIME : [Sat Jun  1 21:40:39 2019]
 URL : /
 IP : 127.0.0.1
-Port : 6148
-PID : 23172
+Port : 11297
+PID : 36999
 ==============================================
 
-[Sat Jun  1 20:12:02 2019] idleProcessCount : 4
+[Sat Jun  1 21:40:39 2019] idleProcessCount : 4
 
 ================= New Client =================
-TIME : [Sat Jun  1 20:12:06 2019]
-URL : /
-IP : 127.0.0.1
-Port : 6151
-PID : 23684
-==============================================
-
-[Sat Jun  1 20:12:06 2019] idleProcessCount : 3
-[Sat Jun  1 20:12:06 2019] 6181 process is forked.
-[Sat Jun  1 20:12:06 2019] idleProcessCount : 4
-[Sat Jun  1 20:12:06 2019] 6184 process is forked.
-[Sat Jun  1 20:12:06 2019] idleProcessCount : 5
-
-============= Disconnected client ============
-TIME : [Sat Jun  1 20:12:07 2019]
-URL : /
-IP : 127.0.0.1
-Port : 23172
-PID : 6148
-CONNECTING TIME: 8043(us)
-==============================================
-
-[Sat Jun  1 20:12:07 2019] idleProcessCount : 6
-
-============= Disconnected client ============
-TIME : [Sat Jun  1 20:12:11 2019]
-URL : /
-IP : 127.0.0.1
-Port : 23684
-PID : 6151
-CONNECTING TIME: 5456(us)
-==============================================
-
-[Sat Jun  1 20:12:11 2019] idleProcessCount : 7
-[Sat Jun  1 20:12:11 2019] 6184 process is terminated.
-[Sat Jun  1 20:12:11 2019] idleProcessCount : 6
-[Sat Jun  1 20:12:11 2019] 6181 process is terminated.
-[Sat Jun  1 20:12:11 2019] idleProcessCount : 5
-
-================= New Client =================
-TIME : [Sat Jun  1 20:12:19 2019]
+TIME : [Sat Jun  1 21:40:42 2019]
 URL : /Hello
 IP : 127.0.0.1
-Port : 6154
-PID : 24708
+Port : 11300
+PID : 37511
 ==============================================
 
-[Sat Jun  1 20:12:19 2019] idleProcessCount : 4
+[Sat Jun  1 21:40:42 2019] idleProcessCount : 3
+[Sat Jun  1 21:40:42 2019] 11323 process is forked.
+[Sat Jun  1 21:40:42 2019] idleProcessCount : 4
+[Sat Jun  1 21:40:42 2019] 11326 process is forked.
+[Sat Jun  1 21:40:42 2019] idleProcessCount : 5
 
 ============= Disconnected client ============
-TIME : [Sat Jun  1 20:12:24 2019]
-URL : /Hello
+TIME : [Sat Jun  1 21:40:44 2019]
+URL : /
 IP : 127.0.0.1
-Port : 24708
-PID : 6154
-CONNECTING TIME: 122290(us)
+Port : 36999
+PID : 11297
+CONNECTING TIME: 2250(us)
 ==============================================
 
-[Sat Jun  1 20:12:24 2019] idleProcessCount : 5
+[Sat Jun  1 21:40:44 2019] idleProcessCount : 6
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:40:47 2019]
+URL : /Hello
+IP : 127.0.0.1
+Port : 37511
+PID : 11300
+CONNECTING TIME: 1833(us)
+==============================================
+
+[Sat Jun  1 21:40:47 2019] idleProcessCount : 7
+[Sat Jun  1 21:40:47 2019] 11326 process is terminated.
+[Sat Jun  1 21:40:47 2019] idleProcessCount : 6
+[Sat Jun  1 21:40:47 2019] 11323 process is terminated.
+[Sat Jun  1 21:40:47 2019] idleProcessCount : 5
+
+================= New Client =================
+TIME : [Sat Jun  1 21:40:50 2019]
+URL : /
+IP : 127.0.0.1
+Port : 11303
+PID : 38023
+==============================================
+
+[Sat Jun  1 21:40:50 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:40:55 2019]
+URL : /
+IP : 127.0.0.1
+Port : 38023
+PID : 11303
+CONNECTING TIME: 1480(us)
+==============================================
+
+[Sat Jun  1 21:40:55 2019] idleProcessCount : 5
+
+================= New Client =================
+TIME : [Sat Jun  1 21:40:57 2019]
+URL : /ls.c
+IP : 127.0.0.1
+Port : 11306
+PID : 39047
+==============================================
+
+[Sat Jun  1 21:40:57 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:41:02 2019]
+URL : /ls.c
+IP : 127.0.0.1
+Port : 39047
+PID : 11306
+CONNECTING TIME: 2318(us)
+==============================================
+
+[Sat Jun  1 21:41:02 2019] idleProcessCount : 5
+
+================= New Client =================
+TIME : [Sat Jun  1 21:41:12 2019]
+URL : /server_log.txt
+IP : 127.0.0.1
+Port : 11309
+PID : 40071
+==============================================
+
+[Sat Jun  1 21:41:12 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:41:17 2019]
+URL : /server_log.txt
+IP : 127.0.0.1
+Port : 40071
+PID : 11309
+CONNECTING TIME: 1130(us)
+==============================================
+
+[Sat Jun  1 21:41:17 2019] idleProcessCount : 5
+
+================= New Client =================
+TIME : [Sat Jun  1 21:41:30 2019]
+URL : /procmanage.h
+IP : 127.0.0.1
+Port : 11297
+PID : 41095
+==============================================
+
+[Sat Jun  1 21:41:30 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:41:35 2019]
+URL : /procmanage.h
+IP : 127.0.0.1
+Port : 41095
+PID : 11297
+CONNECTING TIME: 1477(us)
+==============================================
+
+[Sat Jun  1 21:41:35 2019] idleProcessCount : 5
+
+================= New Client =================
+TIME : [Sat Jun  1 21:41:39 2019]
+URL : /web.h
+IP : 127.0.0.1
+Port : 11300
+PID : 41607
+==============================================
+
+[Sat Jun  1 21:41:39 2019] idleProcessCount : 4
+
+============= Disconnected client ============
+TIME : [Sat Jun  1 21:41:44 2019]
+URL : /web.h
+IP : 127.0.0.1
+Port : 41607
+PID : 11300
+CONNECTING TIME: 1539(us)
+==============================================
+
+[Sat Jun  1 21:41:44 2019] idleProcessCount : 5
 ^c
-[Sat Jun  1 20:12:38 2019] 6160 process is terminated.
-[Sat Jun  1 20:12:38 2019] idleProcessCount : 4
-[Sat Jun  1 20:12:38 2019] 6157 process is terminated.
-[Sat Jun  1 20:12:38 2019] idleProcessCount : 3
-[Sat Jun  1 20:12:38 2019] 6154 process is terminated.
-[Sat Jun  1 20:12:38 2019] idleProcessCount : 2
-[Sat Jun  1 20:12:38 2019] 6151 process is terminated.
-[Sat Jun  1 20:12:38 2019] idleProcessCount : 1
-[Sat Jun  1 20:12:38 2019] 6148 process is terminated.
-[Sat Jun  1 20:12:38 2019] idleProcessCount : 0
+[Sat Jun  1 21:41:48 2019] 11309 process is terminated.
+[Sat Jun  1 21:41:48 2019] idleProcessCount : 4
+[Sat Jun  1 21:41:48 2019] 11306 process is terminated.
+[Sat Jun  1 21:41:48 2019] idleProcessCount : 3
+[Sat Jun  1 21:41:48 2019] 11303 process is terminated.
+[Sat Jun  1 21:41:48 2019] idleProcessCount : 2
+[Sat Jun  1 21:41:48 2019] 11300 process is terminated.
+[Sat Jun  1 21:41:48 2019] idleProcessCount : 1
+[Sat Jun  1 21:41:48 2019] 11297 process is terminated.
+[Sat Jun  1 21:41:48 2019] idleProcessCount : 0
